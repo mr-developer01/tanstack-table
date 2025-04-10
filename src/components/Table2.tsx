@@ -9,7 +9,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TablePagination, // Added for pagination controls
+  TablePagination,
+  Typography, // Added for pagination controls
 } from "@mui/material";
 import {
   createColumnHelper,
@@ -88,62 +89,67 @@ const TanstackTable2 = () => {
   });
 
   return (
-    <Stack sx={{ alignItems: "center", marginBottom: "100px" }}>
-      <Box
-        sx={{
-          width: "960px",
-          border: "1px solid black",
-          overflowY: "auto",
-        }}
-      >
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-      {/* Pagination Controls */}
-      <TablePagination
-        component="div"
-        count={data.length} // Total number of rows
-        page={pageIndex} // Current page (0-based index)
-        onPageChange={(_, newPage) => table.setPageIndex(newPage)} // Update page index
-        rowsPerPage={pageSize} // Rows per page
-        onRowsPerPageChange={(event) =>
-          table.setPageSize(parseInt(event.target.value, 10))
-        } // Update page size
-        rowsPerPageOptions={[5, 10, 25, 50]} // Options for rows per page
-      />
-    </Stack>
+    <>
+      <Typography variant="h2" textAlign={"center"} gutterBottom>
+        Add Pagination
+      </Typography>
+      <Stack sx={{ alignItems: "center", marginBottom: "100px" }}>
+        <Box
+          sx={{
+            width: "960px",
+            border: "1px solid black",
+            overflowY: "auto",
+          }}
+        >
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHead>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        {/* Pagination Controls */}
+        <TablePagination
+          component="div"
+          count={data.length} // Total number of rows
+          page={pageIndex} // Current page (0-based index)
+          onPageChange={(_, newPage) => table.setPageIndex(newPage)} // Update page index
+          rowsPerPage={pageSize} // Rows per page
+          onRowsPerPageChange={(event) =>
+            table.setPageSize(parseInt(event.target.value, 10))
+          } // Update page size
+          rowsPerPageOptions={[5, 10, 25, 50]} // Options for rows per page
+        />
+      </Stack>
+    </>
   );
 };
 

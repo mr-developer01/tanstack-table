@@ -9,6 +9,7 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from "@mui/material";
 import {
   createColumnHelper,
@@ -69,51 +70,56 @@ const TanstackTable = () => {
     getCoreRowModel: getCoreRowModel(),
   });
   return (
-    <Stack sx={{alignItems: 'center', marginBottom: '100px'}}>
-      <Box
-        sx={{
-          width: "960px",
-          height: "800px",
-          border: "1px solid black",
-          overflowY: "auto",
-        }}
-      >
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </Stack>
+    <>
+      <Typography variant="h2" textAlign={"center"} gutterBottom>
+        Normal Table
+      </Typography>
+      <Stack sx={{ alignItems: "center", marginBottom: "100px" }}>
+        <Box
+          sx={{
+            width: "960px",
+            height: "800px",
+            border: "1px solid black",
+            overflowY: "auto",
+          }}
+        >
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHead>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Stack>
+    </>
   );
 };
 

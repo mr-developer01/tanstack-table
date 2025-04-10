@@ -1,128 +1,133 @@
 import {
-    Box,
-    Button,
-    Paper,
-    Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TablePagination,
-  } from "@mui/material";
-  import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    useReactTable,
-    SortingState,
-  } from "@tanstack/react-table";
-  import React from "react";
-  import { TUser } from "../types/tables";
-  import { Trash2 } from "lucide-react";
-  import mockData from "../../MOCK_DATA.json";
-  import { ArrowUpward, ArrowDownward, Sort } from "@mui/icons-material"; // Added Sort icon
-  
-  interface CustomTableMeta {
-    onDelete: (id: number) => void;
-  }
-  
-  const columnHelper = createColumnHelper<TUser>();
-  const columns = [
-    columnHelper.accessor("id", {
-      header: () => <span>Id</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-    }),
-    columnHelper.accessor("first_name", {
-      header: () => <span>First Name</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-    }),
-    columnHelper.accessor("last_name", {
-      header: () => <span>Last Name</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-    }),
-    columnHelper.accessor("email", {
-      header: () => <span>Email</span>,
-      cell: (info) => <span className="email-text">{info.getValue()}</span>,
-      enableSorting: true,
-    }),
-    columnHelper.accessor("gender", {
-      header: () => <span>Gender</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-    }),
-    columnHelper.accessor("ip_address", {
-      header: () => <span>Address</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-    }),
-    columnHelper.display({
-      id: "actions",
-      header: () => <span>Actions</span>,
-      cell: (info) => {
-        const rowId = info.row.original.id;
-        const { onDelete } = info.table.options.meta as CustomTableMeta;
-        return (
-          <Button onClick={() => onDelete(rowId)}>
-            <Trash2 size={18} color="red" />
-          </Button>
-        );
+  Box,
+  Button,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  Typography,
+} from "@mui/material";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  SortingState,
+} from "@tanstack/react-table";
+import React from "react";
+import { TUser } from "../types/tables";
+import { Trash2 } from "lucide-react";
+import mockData from "../../MOCK_DATA.json";
+import { ArrowUpward, ArrowDownward, Sort } from "@mui/icons-material"; // Added Sort icon
+
+interface CustomTableMeta {
+  onDelete: (id: number) => void;
+}
+
+const columnHelper = createColumnHelper<TUser>();
+const columns = [
+  columnHelper.accessor("id", {
+    header: () => <span>Id</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+  }),
+  columnHelper.accessor("first_name", {
+    header: () => <span>First Name</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+  }),
+  columnHelper.accessor("last_name", {
+    header: () => <span>Last Name</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+  }),
+  columnHelper.accessor("email", {
+    header: () => <span>Email</span>,
+    cell: (info) => <span className="email-text">{info.getValue()}</span>,
+    enableSorting: true,
+  }),
+  columnHelper.accessor("gender", {
+    header: () => <span>Gender</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+  }),
+  columnHelper.accessor("ip_address", {
+    header: () => <span>Address</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+  }),
+  columnHelper.display({
+    id: "actions",
+    header: () => <span>Actions</span>,
+    cell: (info) => {
+      const rowId = info.row.original.id;
+      const { onDelete } = info.table.options.meta as CustomTableMeta;
+      return (
+        <Button onClick={() => onDelete(rowId)}>
+          <Trash2 size={18} color="red" />
+        </Button>
+      );
+    },
+    enableSorting: false,
+  }),
+];
+
+const TanstackTable5 = () => {
+  const [data, setData] = React.useState(() => [...mockData]);
+  const [pageIndex, setPageIndex] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
+  const handleDelete = (id: number) => {
+    setData((prevData) => prevData.filter((row) => row.id !== id));
+    const totalRows = data.length - 1;
+    const totalPages = Math.ceil(totalRows / pageSize);
+    if (pageIndex >= totalPages && pageIndex > 0) {
+      setPageIndex(totalPages - 1);
+    }
+  };
+
+  const table = useReactTable<TUser>({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize,
       },
-      enableSorting: false,
-    }),
-  ];
-  
-  const TanstackTable5 = () => {
-    const [data, setData] = React.useState(() => [...mockData]);
-    const [pageIndex, setPageIndex] = React.useState(0);
-    const [pageSize, setPageSize] = React.useState(10);
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-  
-    const handleDelete = (id: number) => {
-      setData((prevData) => prevData.filter((row) => row.id !== id));
-      const totalRows = data.length - 1;
-      const totalPages = Math.ceil(totalRows / pageSize);
-      if (pageIndex >= totalPages && pageIndex > 0) {
-        setPageIndex(totalPages - 1);
-      }
-    };
-  
-    const table = useReactTable<TUser>({
-      data,
-      columns,
-      getCoreRowModel: getCoreRowModel(),
-      getPaginationRowModel: getPaginationRowModel(),
-      getSortedRowModel: getSortedRowModel(),
-      state: {
-        pagination: {
-          pageIndex,
-          pageSize,
-        },
-        sorting,
-      },
-      onPaginationChange: (updater) => {
-        const newPagination =
-          typeof updater === "function"
-            ? updater({ pageIndex, pageSize })
-            : updater;
-        setPageIndex(newPagination.pageIndex);
-        setPageSize(newPagination.pageSize);
-      },
-      onSortingChange: setSorting,
-      manualPagination: false,
-      manualSorting: false,
-      meta: {
-        onDelete: handleDelete,
-      } as CustomTableMeta,
-    });
-  
-    return (
+      sorting,
+    },
+    onPaginationChange: (updater) => {
+      const newPagination =
+        typeof updater === "function"
+          ? updater({ pageIndex, pageSize })
+          : updater;
+      setPageIndex(newPagination.pageIndex);
+      setPageSize(newPagination.pageSize);
+    },
+    onSortingChange: setSorting,
+    manualPagination: false,
+    manualSorting: false,
+    meta: {
+      onDelete: handleDelete,
+    } as CustomTableMeta,
+  });
+
+  return (
+    <>
+      <Typography variant="h2" textAlign={"center"} gutterBottom>
+        Select Header Column Then Sort
+      </Typography>
       <Stack sx={{ alignItems: "center", marginBottom: "100px" }}>
         <Box
           sx={{
@@ -142,7 +147,9 @@ import {
                         key={header.id}
                         onClick={header.column.getToggleSortingHandler()}
                         sx={{
-                          cursor: header.column.getCanSort() ? "pointer" : "default",
+                          cursor: header.column.getCanSort()
+                            ? "pointer"
+                            : "default",
                           userSelect: "none",
                         }}
                       >
@@ -196,7 +203,8 @@ import {
           rowsPerPageOptions={[5, 10, 25, 50]}
         />
       </Stack>
-    );
-  };
-  
-  export default TanstackTable5;
+    </>
+  );
+};
+
+export default TanstackTable5;

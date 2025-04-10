@@ -10,6 +10,7 @@ import {
   TableHead,
   TableRow,
   TablePagination,
+  Typography,
 } from "@mui/material";
 import {
   createColumnHelper,
@@ -109,62 +110,67 @@ const TanstackTable3 = () => {
   });
 
   return (
-    <Stack sx={{ alignItems: "center", marginBottom: "100px" }}>
-      <Box
-        sx={{
-          width: "960px",
-          height: "800px",
-          border: "1px solid black",
-          overflowY: "auto",
-        }}
-      >
-        <TableContainer component={Paper}>
-          <Table aria-label="simple table">
-            <TableHead>
-              {table.getHeaderGroups().map((headerGroup) => (
-                <TableRow key={headerGroup.id}>
-                  {headerGroup.headers.map((header) => (
-                    <TableCell key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableHead>
-            <TableBody>
-              {table.getRowModel().rows.map((row) => (
-                <TableRow key={row.id}>
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-      <TablePagination
-        component="div"
-        count={data.length}
-        page={pageIndex}
-        onPageChange={(_, newPage) => table.setPageIndex(newPage)}
-        rowsPerPage={pageSize}
-        onRowsPerPageChange={(event) =>
-          table.setPageSize(parseInt(event.target.value, 10))
-        }
-        rowsPerPageOptions={[5, 10, 25, 50]}
-      />
-    </Stack>
+    <>
+      <Typography variant="h2" textAlign={"center"} gutterBottom>
+        Add Delete Action
+      </Typography>
+      <Stack sx={{ alignItems: "center", marginBottom: "100px" }}>
+        <Box
+          sx={{
+            width: "960px",
+            height: "800px",
+            border: "1px solid black",
+            overflowY: "auto",
+          }}
+        >
+          <TableContainer component={Paper}>
+            <Table aria-label="simple table">
+              <TableHead>
+                {table.getHeaderGroups().map((headerGroup) => (
+                  <TableRow key={headerGroup.id}>
+                    {headerGroup.headers.map((header) => (
+                      <TableCell key={header.id}>
+                        {header.isPlaceholder
+                          ? null
+                          : flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableHead>
+              <TableBody>
+                {table.getRowModel().rows.map((row) => (
+                  <TableRow key={row.id}>
+                    {row.getVisibleCells().map((cell) => (
+                      <TableCell key={cell.id}>
+                        {flexRender(
+                          cell.column.columnDef.cell,
+                          cell.getContext()
+                        )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+        <TablePagination
+          component="div"
+          count={data.length}
+          page={pageIndex}
+          onPageChange={(_, newPage) => table.setPageIndex(newPage)}
+          rowsPerPage={pageSize}
+          onRowsPerPageChange={(event) =>
+            table.setPageSize(parseInt(event.target.value, 10))
+          }
+          rowsPerPageOptions={[5, 10, 25, 50]}
+        />
+      </Stack>
+    </>
   );
 };
 

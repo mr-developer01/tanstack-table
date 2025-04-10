@@ -1,168 +1,181 @@
 import {
-    Box,
-    Button,
-    Paper,
-    Stack,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableHead,
-    TableRow,
-    TablePagination,
-    TextField,
-    IconButton,
-    Chip,
-  } from "@mui/material";
-  import {
-    createColumnHelper,
-    flexRender,
-    getCoreRowModel,
-    getPaginationRowModel,
-    getSortedRowModel,
-    getFilteredRowModel,
-    useReactTable,
-    SortingState,
-  } from "@tanstack/react-table";
-  import React from "react";
-  import { TUser } from "../types/tables";
-  import { Trash2, Edit } from "lucide-react"; // Added Edit icon
-  import mockData from "../../MOCK_DATA.json";
-  import { ArrowUpward, ArrowDownward, Sort, Email as EmailIcon } from "@mui/icons-material";
-  
-  interface CustomTableMeta {
-    onDelete: (id: number) => void;
-  }
-  
-  const columnHelper = createColumnHelper<TUser>();
-  const columns = [
-    columnHelper.accessor("id", {
-      header: () => <span>Id</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor("first_name", {
-      header: () => <span>First Name</span>,
-      cell: (info) => (
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => alert(`Hello, ${info.getValue()}!`)}
-        >
-          {info.getValue()}
-        </Button>
-      ), // Custom button
-      enableSorting: true,
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor("last_name", {
-      header: () => <span>Last Name</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor("email", {
-      header: () => <span>Email</span>,
-      cell: (info) => (
-        <Box sx={{ display: "flex", alignItems: "center" }}>
-          <EmailIcon fontSize="small" sx={{ mr: 1 }} />
-          <span className="email-text">{info.getValue()}</span>
+  Box,
+  Button,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  TablePagination,
+  TextField,
+  IconButton,
+  Chip,
+  Typography,
+} from "@mui/material";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  getFilteredRowModel,
+  useReactTable,
+  SortingState,
+} from "@tanstack/react-table";
+import React from "react";
+import { TUser } from "../types/tables";
+import { Trash2, Edit } from "lucide-react"; // Added Edit icon
+import mockData from "../../MOCK_DATA.json";
+import {
+  ArrowUpward,
+  ArrowDownward,
+  Sort,
+  Email as EmailIcon,
+} from "@mui/icons-material";
+
+interface CustomTableMeta {
+  onDelete: (id: number) => void;
+}
+
+const columnHelper = createColumnHelper<TUser>();
+const columns = [
+  columnHelper.accessor("id", {
+    header: () => <span>Id</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+    filterFn: "includesString",
+  }),
+  columnHelper.accessor("first_name", {
+    header: () => <span>First Name</span>,
+    cell: (info) => (
+      <Button
+        variant="outlined"
+        size="small"
+        onClick={() => alert(`Hello, ${info.getValue()}!`)}
+      >
+        {info.getValue()}
+      </Button>
+    ), // Custom button
+    enableSorting: true,
+    filterFn: "includesString",
+  }),
+  columnHelper.accessor("last_name", {
+    header: () => <span>Last Name</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+    filterFn: "includesString",
+  }),
+  columnHelper.accessor("email", {
+    header: () => <span>Email</span>,
+    cell: (info) => (
+      <Box sx={{ display: "flex", alignItems: "center" }}>
+        <EmailIcon fontSize="small" sx={{ mr: 1 }} />
+        <span className="email-text">{info.getValue()}</span>
+      </Box>
+    ), // Custom email with icon
+    enableSorting: true,
+    filterFn: "includesString",
+  }),
+  columnHelper.accessor("gender", {
+    header: () => <span>Gender</span>,
+    cell: (info) => (
+      <Chip
+        label={info.getValue()}
+        color={info.getValue() === "Male" ? "primary" : "secondary"}
+        size="small"
+      />
+    ), // Custom chip
+    enableSorting: true,
+    filterFn: "includesString",
+  }),
+  columnHelper.accessor("ip_address", {
+    header: () => <span>Address</span>,
+    cell: (info) => info.getValue(),
+    enableSorting: true,
+    filterFn: "includesString",
+  }),
+  columnHelper.display({
+    id: "actions",
+    header: () => <span>Actions</span>,
+    cell: (info) => {
+      const rowId = info.row.original.id;
+      const { onDelete } = info.table.options.meta as CustomTableMeta;
+      return (
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <IconButton onClick={() => onDelete(rowId)} color="error">
+            <Trash2 size={18} />
+          </IconButton>
+          <IconButton
+            onClick={() => alert(`Editing row ${rowId}`)}
+            color="primary"
+          >
+            <Edit size={18} />
+          </IconButton>
         </Box>
-      ), // Custom email with icon
-      enableSorting: true,
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor("gender", {
-      header: () => <span>Gender</span>,
-      cell: (info) => (
-        <Chip
-          label={info.getValue()}
-          color={info.getValue() === "Male" ? "primary" : "secondary"}
-          size="small"
-        />
-      ), // Custom chip
-      enableSorting: true,
-      filterFn: "includesString",
-    }),
-    columnHelper.accessor("ip_address", {
-      header: () => <span>Address</span>,
-      cell: (info) => info.getValue(),
-      enableSorting: true,
-      filterFn: "includesString",
-    }),
-    columnHelper.display({
-      id: "actions",
-      header: () => <span>Actions</span>,
-      cell: (info) => {
-        const rowId = info.row.original.id;
-        const { onDelete } = info.table.options.meta as CustomTableMeta;
-        return (
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <IconButton onClick={() => onDelete(rowId)} color="error">
-              <Trash2 size={18} />
-            </IconButton>
-            <IconButton onClick={() => alert(`Editing row ${rowId}`)} color="primary">
-              <Edit size={18} />
-            </IconButton>
-          </Box>
-        ); // Custom dual buttons
+      ); // Custom dual buttons
+    },
+    enableSorting: false,
+  }),
+];
+
+const TanstackTable7 = () => {
+  const [data, setData] = React.useState(() => [...mockData]);
+  const [pageIndex, setPageIndex] = React.useState(0);
+  const [pageSize, setPageSize] = React.useState(10);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const [globalFilter, setGlobalFilter] = React.useState("");
+
+  const handleDelete = (id: number) => {
+    setData((prevData) => prevData.filter((row) => row.id !== id));
+    const totalRows = data.length - 1;
+    const totalPages = Math.ceil(totalRows / pageSize);
+    if (pageIndex >= totalPages && pageIndex > 0) {
+      setPageIndex(totalPages - 1);
+    }
+  };
+
+  const table = useReactTable<TUser>({
+    data,
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    state: {
+      pagination: {
+        pageIndex,
+        pageSize,
       },
-      enableSorting: false,
-    }),
-  ];
-  
-  const TanstackTable7 = () => {
-    const [data, setData] = React.useState(() => [...mockData]);
-    const [pageIndex, setPageIndex] = React.useState(0);
-    const [pageSize, setPageSize] = React.useState(10);
-    const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [globalFilter, setGlobalFilter] = React.useState("");
-  
-    const handleDelete = (id: number) => {
-      setData((prevData) => prevData.filter((row) => row.id !== id));
-      const totalRows = data.length - 1;
-      const totalPages = Math.ceil(totalRows / pageSize);
-      if (pageIndex >= totalPages && pageIndex > 0) {
-        setPageIndex(totalPages - 1);
-      }
-    };
-  
-    const table = useReactTable<TUser>({
-      data,
-      columns,
-      getCoreRowModel: getCoreRowModel(),
-      getPaginationRowModel: getPaginationRowModel(),
-      getSortedRowModel: getSortedRowModel(),
-      getFilteredRowModel: getFilteredRowModel(),
-      state: {
-        pagination: {
-          pageIndex,
-          pageSize,
-        },
-        sorting,
-        globalFilter,
-      },
-      onPaginationChange: (updater) => {
-        const newPagination =
-          typeof updater === "function"
-            ? updater({ pageIndex, pageSize })
-            : updater;
-        setPageIndex(newPagination.pageIndex);
-        setPageSize(newPagination.pageSize);
-      },
-      onSortingChange: setSorting,
-      onGlobalFilterChange: setGlobalFilter,
-      globalFilterFn: "includesString",
-      manualPagination: false,
-      manualSorting: false,
-      manualFiltering: false,
-      meta: {
-        onDelete: handleDelete,
-      } as CustomTableMeta,
-    });
-  
-    return (
+      sorting,
+      globalFilter,
+    },
+    onPaginationChange: (updater) => {
+      const newPagination =
+        typeof updater === "function"
+          ? updater({ pageIndex, pageSize })
+          : updater;
+      setPageIndex(newPagination.pageIndex);
+      setPageSize(newPagination.pageSize);
+    },
+    onSortingChange: setSorting,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: "includesString",
+    manualPagination: false,
+    manualSorting: false,
+    manualFiltering: false,
+    meta: {
+      onDelete: handleDelete,
+    } as CustomTableMeta,
+  });
+
+  return (
+    <>
+      <Typography variant="h4" textAlign={"center"} gutterBottom>
+        Custom Cells: Render buttons, images, or custom components in cells.
+      </Typography>
       <Stack sx={{ alignItems: "center", marginBottom: "100px" }}>
         <Box sx={{ width: "960px", mb: 2 }}>
           <TextField
@@ -192,7 +205,9 @@ import {
                         key={header.id}
                         onClick={header.column.getToggleSortingHandler()}
                         sx={{
-                          cursor: header.column.getCanSort() ? "pointer" : "default",
+                          cursor: header.column.getCanSort()
+                            ? "pointer"
+                            : "default",
                           userSelect: "none",
                         }}
                       >
@@ -245,7 +260,8 @@ import {
           rowsPerPageOptions={[5, 10, 25, 50]}
         />
       </Stack>
-    );
-  };
-  
-  export default TanstackTable7;
+    </>
+  );
+};
+
+export default TanstackTable7;
